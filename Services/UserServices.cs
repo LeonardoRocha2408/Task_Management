@@ -21,7 +21,7 @@ namespace TaskManagementAPI.Services
             _authServices = authServices;
         }
 
-        // Create the account method and see if the current email is already in the database
+        // Create the account method and see if the current email is already in the database and verify password
         public async Task<CreateAccountResult> CreateAccount(CreateAccountRequest dto)
         {
             UserEntity? user = await _context.Users
@@ -33,12 +33,19 @@ namespace TaskManagementAPI.Services
             } 
             else
             {
+                var result = _authServices.ValidatePassword(dto.Password);
+                if (result != Enums.AuthPasswordResult.PasswordIsInTheCorrectFormat)
+                {
+                    return CreateAccountResult.PasswordIsInTheIncorrectFormat;
+                }
+                
                 var userToAdd = new UserEntity()
                 {
                     Id = new Guid(),
                     Role = Role.User,
                     Email = dto.Email,
-                    UserName = dto.UserName
+                    UserName = dto.UserName,
+                    CreatedAt = DateTime.UtcNow
                 };
                 userToAdd.PasswordHash = _authServices.HashPassword(userToAdd, dto.Password);
 
@@ -85,6 +92,12 @@ namespace TaskManagementAPI.Services
             }
             else if (result == PasswordVerificationResult.Success)
             {
+                var resultValidateNewPassword = _authServices.ValidatePassword(dto.NewPassword);
+                if (resultValidateNewPassword != Enums.AuthPasswordResult.PasswordIsInTheCorrectFormat)
+                {
+                    return ChangePasswordResult.NewPasswordIsInTheIncorrectFormat;
+                }
+
                 user.PasswordHash = _authServices.HashPassword(user, dto.NewPassword);
                 await _context.SaveChangesAsync();
             }

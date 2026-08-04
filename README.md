@@ -4,6 +4,7 @@ This project is a task management tool similar to Trello. It goal is to allow pe
 ## Features
 - Create, delete and change password account
 - Login account 
+- Create project
 - JWT authentication
 - HttpOnly
 - Password hashing

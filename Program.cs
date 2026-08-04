@@ -97,6 +97,15 @@ builder.Services.AddRateLimiter(options =>
             PermitLimit = 5, 
             Window = TimeSpan.FromDays(1)
         }));
+
+    options.AddPolicy("LimiterCreateProjects", httpContext =>
+    RateLimitPartition.GetFixedWindowLimiter(
+        partitionKey: httpContext.Connection.RemoteIpAddress?.ToString(),
+        factory: _ => new FixedWindowRateLimiterOptions
+        {
+            PermitLimit = 5,
+            Window = TimeSpan.FromMinutes(1)
+        }));
 });
 
 
@@ -121,6 +130,7 @@ builder.Services.AddSwaggerGen(options =>
 
 // Add the scopeds to program
 builder.Services.AddScoped<UserServices>();
+builder.Services.AddScoped<SystemServices>();
 builder.Services.AddScoped<AuthServices>();
 
 

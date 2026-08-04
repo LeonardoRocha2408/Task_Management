@@ -40,7 +40,7 @@ namespace TaskManagementAPI.Endpoints
 
                     case LoginResult.LoginAccountSuccessfully:
                         string token = authServices.GenerateToken(result.user!);
-
+ 
                         context.Response.Cookies.Append(
                             "accessToken",
                             token,
@@ -71,6 +71,8 @@ namespace TaskManagementAPI.Endpoints
                     ChangePasswordResult.AccountNotFound => Results.NotFound("Account not exists"),
 
                     ChangePasswordResult.WrongData => Results.Unauthorized(),
+
+                    ChangePasswordResult.NewPasswordIsInTheIncorrectFormat => Results.BadRequest("New password doesn't match the expected format"),
 
                     ChangePasswordResult.PasswordChagedSuccessfully => Results.Accepted("Password changed successfully"),
 

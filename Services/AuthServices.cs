@@ -7,6 +7,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Enums;
 
 namespace TaskManagementAPI.Services
 {
@@ -64,6 +65,32 @@ namespace TaskManagementAPI.Services
                 .WriteToken(token);
 
             return jwt;
+        }
+
+        public AuthPasswordResult ValidatePassword(string Password)
+        {
+            if (Password.Length < 8)
+            {
+                return AuthPasswordResult.PasswordMustBeAtLeast_8CharacterLong;
+            }
+            if (!Password.Any(char.IsUpper))
+            {
+                return AuthPasswordResult.PassworMustHaveOne_UppercaseCharacter;
+            }
+            if (!Password.Any(char.IsLower))
+            {
+                return AuthPasswordResult.PassworMustHaveOne_UppercaseCharacter;
+            }
+            if (!Password.Any(char.IsDigit))
+            {
+                return AuthPasswordResult.PassworMustHaveOne_NumericCharacter;
+            }
+            if (!Password.Any(c => !char.IsLetterOrDigit(c)))
+            {
+                return AuthPasswordResult.PassworMustHaveOne_SpecialCharacter;
+            }
+            
+            return AuthPasswordResult.PasswordIsInTheCorrectFormat;
         }
     }
 }
