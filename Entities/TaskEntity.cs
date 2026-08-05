@@ -31,7 +31,7 @@ namespace TaskManagementAPI.Entities
         public string Description { get; set; } = string.Empty;
 
         [Column("DueDate")]
-        public Guid DueDate { get; set; }
+        public DateTime DueDate { get; set; }
 
         [Column("CreatedAt")]
         public DateTime CreatedAt { get; set; }

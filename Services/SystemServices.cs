@@ -1,7 +1,7 @@
-﻿using Enums.ServicesEnums;
+﻿using Enums.ServicesDTOs;
+using Enums.ServicesEnums.ProjectAndTasks;
 using Microsoft.EntityFrameworkCore;
 using Shared.ServicesDTOs;
-using Shared.UserDTOs;
 using TaskManagementAPI.Entities;
 
 namespace TaskManagementAPI.Services
@@ -48,6 +48,47 @@ namespace TaskManagementAPI.Services
             await _context.SaveChangesAsync();
 
             return ProjectActionsResult.Created;
+        }
+
+        public async Task<TaskActionsResult> CreateTasks(CreateTaskRequest dto, Guid Id, Guid ProjectId)
+        {
+            UserEntity? user = await _context.Users
+                .FirstOrDefaultAsync(u => u.Id == Id);
+            
+            Guid assignedUserId = await _context.Users
+                .Where(u => u.Email == dto.AssignedUser)
+                .Select(u => u.Id)
+                .FirstOrDefaultAsync();
+
+            if (user == null) 
+            {
+                return TaskActionsResult.UserNotFound;
+            }
+            if (dto.Title.Length < 1)
+            {
+                return TaskActionsResult.InvalidTitle;
+            }
+            else if (dto.Title.Length > 100)
+            {
+                return TaskActionsResult.TitleTooLong;
+            }
+
+            var task = new TaskEntity()
+            {
+                Id = new Guid(),
+                ProjectId = ProjectId,
+                Title = dto.Title,
+                Description = dto.Description,
+                Creator = Id,
+                AssignedUser = assignedUserId,
+                DueDate = dto.DueDate,
+                CreatedAt = DateTime.UtcNow
+            };
+
+            await _context.AddAsync(task);
+            await _context.SaveChangesAsync();
+
+            return TaskActionsResult.Created;
         }
     }
 }
