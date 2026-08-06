@@ -8,11 +8,17 @@ This project is a task management tool similar to Trello. It goal is to allow pe
 - JWT authentication
 - HttpOnly
 - Password hashing
+- React frontend
 
 ## Technologies
 - C#
-- ASP.NET Core 
+- JavaScript
+- HTML
+- CSS
+- ASP.NET Core Minimal API
 - Entity Framework Core
+- React
+- JWT authentication
 - Git
 - MySQL
 

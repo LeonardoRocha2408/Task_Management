@@ -5,5 +5,9 @@
   </Folder>
   <Project Path="../Enums/Enums.csproj" Id="e119e3bf-5d3a-4d24-85df-e64167930056" />
   <Project Path="../Shared/Shared.csproj" Id="a5f4ad99-de7e-45ff-8a04-03b23cf9deb0" />
+  <Project Path="../Task_Management/task_management.esproj">
+    <Build />
+    <Deploy />
+  </Project>
   <Project Path="TaskManagementAPI.csproj" />
 </Solution>

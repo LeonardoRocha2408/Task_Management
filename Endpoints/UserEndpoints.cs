@@ -11,7 +11,7 @@ namespace TaskManagementAPI.Endpoints
     {
         public void MapEndpoints(WebApplication app)
         {
-            app.MapPost("users/create_account", async (CreateAccountRequest request, UserServices user) =>
+            app.MapPost("/create_account", async (CreateAccountRequest request, UserServices user) =>
             {
                 var result = await user.CreateAccount(request);
 
@@ -26,7 +26,7 @@ namespace TaskManagementAPI.Endpoints
             })
                 .RequireRateLimiting("LimiterCreateAccount");
 
-            app.MapPost("users/login_account", async (LoginAccountRequest request, AuthServices authServices, UserServices user, HttpContext context) =>
+            app.MapPost("/login_account", async (LoginAccountRequest request, AuthServices authServices, UserServices user, HttpContext context) =>
             {
                 var result = await user.LoginAccount(request);
 
@@ -62,7 +62,7 @@ namespace TaskManagementAPI.Endpoints
             })
                 .RequireRateLimiting("LimiterLogin");
 
-            app.MapPatch("/user/change_password", async ([FromBody] ChangePasswordRequest request, UserServices user) =>
+            app.MapPatch("/change_password", async ([FromBody] ChangePasswordRequest request, UserServices user) =>
             {
                 ChangePasswordResult result = await user.ChangePassword(request);
 
@@ -95,7 +95,7 @@ namespace TaskManagementAPI.Endpoints
 
                     _ => Results.BadRequest("Unknown error")
                 };
-            });
+            }).RequireAuthorization();
         }
     }
 }

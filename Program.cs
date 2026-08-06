@@ -18,7 +18,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddCors(options =>
     options.AddPolicy("FrontEndOnly", policy =>
     {
-        policy.WithOrigins()
+        policy.WithOrigins("http://localhost:53639")
         .AllowAnyMethod()
         .AllowAnyHeader()
         .AllowCredentials();
@@ -150,7 +150,9 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseCors();
+app.UseRouting();
+
+app.UseCors("FrontEndOnly");
 
 app.UseRateLimiter();
 
