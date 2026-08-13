@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace TaskManagementAPI.Entities
 {
     [Table("Tasks")]
-    public class TaskEntity
+    public sealed class TaskEntity
     {
         [Column("Id")]
         public Guid Id { get; set; }

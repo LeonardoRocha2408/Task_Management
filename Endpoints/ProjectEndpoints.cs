@@ -7,11 +7,11 @@ using TaskManagementAPI.Services;
 
 namespace TaskManagementAPI.Endpoints
 {
-    public class SystemEndpoints : InterfaceEndpoints
+    public sealed class ProjectEndpoints : InterfaceEndpoints
     {
         public void MapEndpoints(WebApplication app)
         {
-            app.MapPost("create_project", async (CreateProjectRequest request, HttpContext context, SystemServices system) =>
+            app.MapPost("create_project", async (CreateProjectRequest request, HttpContext context, ProjectServices system) =>
             {
                 string? userId = context.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
@@ -38,28 +38,30 @@ namespace TaskManagementAPI.Endpoints
                 .RequireAuthorization()
                 .RequireRateLimiting("LimiterCreateProjects");
 
-            app.MapPost("project/{ProjectId}/create_task", async (CreateTaskRequest request, [FromRoute] Guid ProjectId, HttpContext context, SystemServices system) =>
+            // Return the projects that user creates
+            app.MapGet("/me/projects", async (HttpContext context, ProjectServices project) =>
             {
                 string? userId = context.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-                if (!Guid.TryParse(userId, out Guid Id))
+
+                if (!Guid.TryParse(userId, out var Id))
                 {
                     return Results.Unauthorized();
                 }
 
-                TaskActionsResult result = await system.CreateTasks(request, Id, ProjectId);
+                return Results.Ok(await project.GetProjects(Id));
+            })
+                .RequireAuthorization();
 
-                return result switch
+            app.MapGet("/participing_projects", async (HttpContext context, ProjectServices project) =>
+            {
+                string? userId = context.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+                if (!Guid.TryParse(userId, out var Id))
                 {
-                    TaskActionsResult.UserNotFound => Results.NotFound("User not found"),
+                    return Results.Unauthorized();
+                }
 
-                    TaskActionsResult.InvalidTitle => Results.BadRequest("Title is not in the expected format"),
-
-                    TaskActionsResult.TitleTooLong => Results.BadRequest("Title is bigger than expected"),
-
-                    TaskActionsResult.Created => Results.Ok("Task created"),
-
-                    _ => Results.BadRequest("Unknow error")
-                };
+                return Results.Ok(await project.GetParticipingProjects(Id));
             })
                 .RequireAuthorization();
         }

@@ -6,61 +6,27 @@ using TaskManagementAPI.Entities;
 
 namespace TaskManagementAPI.Services
 {
-    public class SystemServices
+    public sealed class TasksServices
     {
         public readonly DbContextEntity _context;
 
-        public SystemServices(DbContextEntity context)
+        public TasksServices(DbContextEntity context)
         {
             _context = context;
         }
 
-        // Create a new project, checking if users id exists and title lenght
-        public async Task<ProjectActionsResult> CreateProject(CreateProjectRequest dto, Guid Id)
-        {
-            UserEntity? user = await _context.Users
-                .FirstOrDefaultAsync(u => u.Id == Id);
-
-            if (user == null) 
-            {
-                return ProjectActionsResult.UserNotFound;
-            }
-
-            if (dto.Title.Length < 1)
-            {
-                return ProjectActionsResult.InvalidTitle;
-            }
-            else if (dto.Title.Length > 100)
-            {
-                return ProjectActionsResult.TitleTooLong;
-            }
-
-            var project = new ProjectEntity
-            {
-                Id = new Guid(),
-                OwnerId = user.Id,
-                Title = dto.Title,
-                Description = dto.Description,
-                CreatedAt = DateTime.UtcNow
-            };
-
-            await _context.AddAsync(project);
-            await _context.SaveChangesAsync();
-
-            return ProjectActionsResult.Created;
-        }
-
+        // Create a new task, checking if users id exists and title lenght
         public async Task<TaskActionsResult> CreateTasks(CreateTaskRequest dto, Guid Id, Guid ProjectId)
         {
             UserEntity? user = await _context.Users
                 .FirstOrDefaultAsync(u => u.Id == Id);
-            
+
             Guid assignedUserId = await _context.Users
                 .Where(u => u.Email == dto.AssignedUser)
                 .Select(u => u.Id)
                 .FirstOrDefaultAsync();
 
-            if (user == null) 
+            if (user == null)
             {
                 return TaskActionsResult.UserNotFound;
             }
@@ -89,6 +55,21 @@ namespace TaskManagementAPI.Services
             await _context.SaveChangesAsync();
 
             return TaskActionsResult.Created;
+        }
+
+        public async Task<List<ResponseTasks>> GetTasks(Guid Id)
+        {
+            return await _context.Tasks
+                .AsNoTracking()
+                .Where(t => t.ProjectId == Id)
+                .Select(t => new ResponseTasks()
+                {
+                    Id = t.Id,
+                    Title = t.Title,
+                    Description = t.Description,
+                    AssignedUser = t.AssignedUser,
+                    CreatedAt = t.CreatedAt
+                }).ToListAsync();
         }
     }
 }

@@ -5,7 +5,7 @@
         public static void MapEndpoints(this WebApplication app)
         {
             new UserEndpoints().MapEndpoints(app);
-            new SystemEndpoints().MapEndpoints(app);
+            new ProjectEndpoints().MapEndpoints(app);
         }
     }
 }

@@ -3,7 +3,7 @@
 namespace TaskManagementAPI.Entities
 {
     [Table("Projects")]
-    public class ProjectEntity
+    public sealed class ProjectEntity
     {
         [Column("Id")]
         public Guid Id { get; set; }

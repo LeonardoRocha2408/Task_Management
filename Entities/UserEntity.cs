@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace TaskManagementAPI.Entities
 {
     [Table("Users")]
-    public class UserEntity
+    public sealed class UserEntity
     {
         [Column("Id")]
         public Guid Id { get; set; }
