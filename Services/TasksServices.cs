@@ -1,5 +1,6 @@
 ﻿using Enums.ServicesDTOs;
 using Enums.ServicesEnums.ProjectAndTasks;
+using Enums.ServicesEnums;
 using Microsoft.EntityFrameworkCore;
 using Shared.ServicesDTOs;
 using TaskManagementAPI.Entities;
@@ -8,8 +9,10 @@ namespace TaskManagementAPI.Services
 {
     public sealed class TasksServices
     {
+
         public readonly DbContextEntity _context;
 
+        // Define the class constructor
         public TasksServices(DbContextEntity context)
         {
             _context = context;
@@ -57,6 +60,7 @@ namespace TaskManagementAPI.Services
             return TaskActionsResult.Created;
         }
 
+        // Get all pending tasks in the project
         public async Task<List<ResponseTasks>> GetTasks(Guid Id)
         {
             return await _context.Tasks
@@ -70,6 +74,18 @@ namespace TaskManagementAPI.Services
                     AssignedUser = t.AssignedUser,
                     CreatedAt = t.CreatedAt
                 }).ToListAsync();
+        }
+
+        public async Task<int> GetPendingTasks(Guid Id)
+        {
+            return await _context.Tasks
+                .CountAsync(t => t.AssignedUser == Id && t.Status != StatusTasks.Completed);
+        }
+
+        public async Task<int> GetCompletedTasks(Guid Id)
+        {
+            return await _context.Tasks
+                .CountAsync(t => t.AssignedUser == Id && t.Status == StatusTasks.Completed);
         }
     }
 }

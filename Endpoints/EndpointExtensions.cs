@@ -6,6 +6,7 @@
         {
             new UserEndpoints().MapEndpoints(app);
             new ProjectEndpoints().MapEndpoints(app);
+            new TaskEndpoints().MapEndpoints(app);
         }
     }
 }

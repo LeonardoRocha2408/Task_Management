@@ -63,6 +63,18 @@ namespace TaskManagementAPI.Endpoints
             })
                 .RequireRateLimiting("LimiterLogin");
 
+            app.MapPost("/logout", (HttpContext context) =>
+            {
+                context.Response.Cookies.Delete("accessToken", new CookieOptions
+                {
+                    HttpOnly = true,
+                    Secure = true,
+                    SameSite = SameSiteMode.None
+                });
+
+                return Results.Ok();
+            });
+
             // Get user profile and return some data like Email, UserName and path profile stored in MySQL database
             app.MapGet("/me", async (HttpContext context, UserServices user) =>
             {

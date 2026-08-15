@@ -3,7 +3,6 @@ using TaskManagementAPI.Endpoints;
 
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi;
 
@@ -130,7 +129,8 @@ builder.Services.AddSwaggerGen(options =>
 
 // Add the scopeds to program
 builder.Services.AddScoped<UserServices>();
-builder.Services.AddScoped<SystemServices>();
+builder.Services.AddScoped<ProjectServices>();
+builder.Services.AddScoped<TasksServices>();
 builder.Services.AddScoped<AuthServices>();
 
 
@@ -154,6 +154,7 @@ app.UseRouting();
 
 app.UseCors("FrontEndOnly");
 
+app.UseStaticFiles();
 app.UseRateLimiter();
 
 app.UseAuthentication();

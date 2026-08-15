@@ -1,5 +1,4 @@
-﻿using Enums.ServicesDTOs;
-using Enums.ServicesEnums.ProjectAndTasks;
+﻿using Enums.ServicesEnums.ProjectAndTasks;
 using Microsoft.EntityFrameworkCore;
 using Shared.ServicesDTOs;
 using TaskManagementAPI.Entities;

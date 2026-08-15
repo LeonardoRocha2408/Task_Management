@@ -10,7 +10,7 @@ namespace TaskManagementAPI.Endpoints
     {
         public void MapEndpoints(WebApplication app)
         {
-            app.MapPost("project/{ProjectId}/create_task", async (CreateTaskRequest request, [FromRoute] Guid ProjectId, HttpContext context, TasksServices system) =>
+            app.MapPost("/project/{ProjectId}/create_task", async (CreateTaskRequest request, [FromRoute] Guid ProjectId, HttpContext context, TasksServices system) =>
             {
                 string? userId = context.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
                 if (!Guid.TryParse(userId, out Guid Id))
@@ -32,6 +32,35 @@ namespace TaskManagementAPI.Endpoints
 
                     _ => Results.BadRequest("Unknow error")
                 };
+            })
+                .RequireAuthorization();
+
+            app.MapGet("/project/{ProjectId}/get_tasks", async ([FromRoute] Guid ProjectId, TasksServices task) =>
+            {
+                return Results.Ok(await task.GetTasks(ProjectId));
+            })
+                .RequireAuthorization();
+
+            app.MapGet("/me/tasks/pending", async (HttpContext context, TasksServices task) =>
+            {
+                string? userId = context.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+                if (!Guid.TryParse(userId, out var Id))
+                {
+                    return Results.BadRequest();
+                }
+                return Results.Ok( await task.GetPendingTasks(Id));
+            });
+
+            app.MapGet("/me/tasks/completed", async (HttpContext context, TasksServices task) =>
+            {
+                string? userId = context.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+                if (!Guid.TryParse(userId, out var Id))
+                {
+                    return Results.BadRequest();
+                }
+                return Results.Ok(await task.GetCompletedTasks(Id));
             })
                 .RequireAuthorization();
         }

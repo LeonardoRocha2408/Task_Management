@@ -77,7 +77,6 @@ namespace TaskManagementAPI.Services
             return (LoginResult.LoginAccountSuccessfully, user);
         }
 
-
         // Get user profile and return some data like Email, UserName and path profile stored in MySQL database
         public async Task<MeResponse?> GetUser(Guid Id)
         {

@@ -11,7 +11,7 @@ namespace TaskManagementAPI.Endpoints
     {
         public void MapEndpoints(WebApplication app)
         {
-            app.MapPost("create_project", async (CreateProjectRequest request, HttpContext context, ProjectServices system) =>
+            app.MapPost("/create_project", async ([FromBody] CreateProjectRequest request, HttpContext context, ProjectServices system) =>
             {
                 string? userId = context.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
