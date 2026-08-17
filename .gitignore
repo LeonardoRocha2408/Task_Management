@@ -1,0 +1,58 @@
+# ==========================
+# Visual Studio
+# ==========================
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# ==========================
+# .NET
+# ==========================
+**/bin/
+**/obj/
+
+# ==========================
+# Node / Vite
+# ==========================
+**/node_modules/
+**/dist/
+**/.vite/
+**/.cache/
+npm-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# ==========================
+# Logs
+# ==========================
+*.log
+
+# ==========================
+# Environment
+# ==========================
+.env
+.env.*
+!.env.example
+
+# ==========================
+# JSON com segredos / configs locais
+# ==========================
+appsettings.json
+appsettings.*.json
+!appsettings.Example.json
+*.local.json
+secrets.json
+
+# ==========================
+# IDE
+# ==========================
+.vscode/
+
+# ==========================
+# Sistema
+# ==========================
+Thumbs.db
+Desktop.ini
+.DS_Store

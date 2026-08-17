@@ -1,0 +1,81 @@
+.home_page-div {
+    display:flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100vh;
+}
+
+header {
+    max-width: 100%;
+}
+main {
+    margin-left: 260px;
+}
+
+.user_div {
+    place-self: end;
+    display: flex;
+    margin: 10px;
+}
+.user_div img {
+    width: 50px;
+}
+
+
+.current-resume {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, max-content));
+    gap: 15px;
+}
+.tasks {
+    display: flex;
+    width: fit-content;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
+    padding: 20px 10px 20px 10px;
+}
+.pending-tasks {
+    width: 50px;
+    padding: 5px;
+    background: #C8C2C9;
+    border-radius: 10px;
+    margin-right: 10px;
+}
+.completed-tasks {
+    width: 50px;
+    padding: 5px;
+    background: #B2D8C0;
+    border-radius: 10px;
+    margin-right: 10px;
+}
+
+
+
+.user-projects {
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+    padding-bottom: 20px;
+    max-width: 40%;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+.create-project-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+.create-new-project {
+    align-self: end;
+    height: 30px;
+    width: 30px;
+    border-radius: 50%;
+    border: none;
+    padding: 5px;
+    margin: 10px 10px 5px 0;
+    transition: background;
+    font-size: 20px;
+}
+.create-new-project:hover {
+    background: #CCCCCC;
+}
